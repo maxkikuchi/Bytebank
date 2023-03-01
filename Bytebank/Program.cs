@@ -10,7 +10,6 @@ namespace Bytebank
     {
         static void Main(string[] args)
         {
-
         }
     }
 }
