@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.33026.149
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytebank", "Bytebank\Bytebank.csproj", "{DA5144BB-DC01-4FBF-82ED-1CA0F7DC8A47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytebank.Portal", "Bytebank\Bytebank.Portal.csproj", "{DA5144BB-DC01-4FBF-82ED-1CA0F7DC8A47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
