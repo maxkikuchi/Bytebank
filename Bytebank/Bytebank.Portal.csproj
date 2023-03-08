@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Utility.cs" />
+    <Compile Include="Infrastructure\WebApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,13 +52,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\css\styles.css" />
-    <Content Include="Assets\js\main.js" />
-    <Content Include="View\Cambio\MXN.html" />
-    <Content Include="View\Cambio\USD.html" />
-    <Content Include="View\Cartoes\Credito.html" />
-    <Content Include="View\Cartoes\Debito.html" />
-    <Content Include="View\Home\Index.html" />
+    <EmbeddedResource Include="Assets\css\styles.css" />
+    <EmbeddedResource Include="Assets\js\main.js" />
+    <EmbeddedResource Include="View\Cambio\MXN.html" />
+    <EmbeddedResource Include="View\Cambio\USD.html" />
+    <EmbeddedResource Include="View\Cartoes\Credito.html" />
+    <EmbeddedResource Include="View\Cartoes\Debito.html" />
+    <EmbeddedResource Include="View\Home\Index.html" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\images\favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

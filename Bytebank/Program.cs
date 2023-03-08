@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bytebank.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,10 @@ namespace Bytebank
     {
         static void Main(string[] args)
         {
-            //teste master
+            var prefixos = new string[] { "http://localhost:5341/", "http://localhost:5342/" };
+
+            var webApplication = new WebApplication(prefixos);
+            webApplication.Iniciar();
         }
     }
 }
