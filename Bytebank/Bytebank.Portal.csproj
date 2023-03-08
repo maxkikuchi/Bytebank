@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\CambioController.cs" />
     <Compile Include="Infrastructure\Utility.cs" />
     <Compile Include="Infrastructure\WebApplication.cs" />
     <Compile Include="Program.cs" />
@@ -60,7 +61,12 @@
     <EmbeddedResource Include="View\Cartoes\Debito.html" />
     <EmbeddedResource Include="View\Home\Index.html" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Bytebank.Service\Bytebank.Service.csproj">
+      <Project>{40cfdca1-0977-4aff-8393-7ff8053ebd2a}</Project>
+      <Name>Bytebank.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\images\favicon.ico" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bytebank.Controller;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,41 +39,70 @@ namespace Bytebank.Infrastructure
                 var requisicao = contexto.Request;
                 var path = requisicao.Url.AbsolutePath;
 
-
-                switch (path)
+                if (Utility.EhArquivo(path))
                 {
-                    case "/Assets/css/styles.css":
-                        //Retornar documento styles.css
-                        nomeResource = Utility.ConverterPathParaNomeAssembly(path);
-                        contentType = Utility.ObterTipoDeConteudo(path);
-                        ExtractOutputStreamFile(contexto, nomeResource, contentType);
+                    switch (path)
+                    {
+                        case "/favicon.ico":
+                            string fullPath = $"/Assets/images{path}";
 
-                        break;
-                    case "/Assets/js/main.js":
-                        //Retornar documento main.js
-                        nomeResource = Utility.ConverterPathParaNomeAssembly(path);
-                        contentType = Utility.ObterTipoDeConteudo(path);
-                        ExtractOutputStreamFile(contexto, nomeResource, contentType);
+                            nomeResource = Utility.ConverterPathParaNomeAssembly(fullPath);
+                            contentType = Utility.ObterTipoDeConteudo(fullPath);
+                            ExtractOutputStreamFile(contexto, nomeResource, contentType);
 
-                        break;
-                    case "/favicon.ico":
-                        string fullPath = $"/Assets/images{path}";
-
-                        nomeResource = Utility.ConverterPathParaNomeAssembly(fullPath);
-                        contentType = Utility.ObterTipoDeConteudo(fullPath);
-                        ExtractOutputStreamFile(contexto, nomeResource, contentType);
-
-                        break;
-                    default:
-                        nomeResource = Utility.ConverterPathParaNomeAssembly(path);
-                        contentType = Utility.ObterTipoDeConteudo(path);
-                        ExtractOutputStreamFile(contexto, nomeResource, contentType);
-                        break;
+                            break;
+                        default:
+                            nomeResource = Utility.ConverterPathParaNomeAssembly(path);
+                            contentType = Utility.ObterTipoDeConteudo(path);
+                            ExtractOutputStreamFile(contexto, nomeResource, contentType);
+                            break;
+                    }
+                }
+                else
+                {
+                    TratarActionController(path, contexto);
                 }
             }
                        
             
             //httpListener.Stop();
+        }
+
+        private static void TratarActionController(string path, HttpListenerContext contexto)
+        {
+            var resposta = contexto.Response;
+            resposta.ContentType = Utility.ObterTipoDeConteudo(path);
+            resposta.StatusCode = 200;
+            CambioController controller;
+            string paginaConteudo;
+            byte[] bufferArquivo;
+
+            switch (path.ToUpper())
+            {
+                case "/CAMBIO/MXN":
+                    controller = new CambioController();
+                    paginaConteudo = controller.MXN();
+
+                    bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
+                    resposta.ContentLength64 = bufferArquivo.Length;
+                    resposta.OutputStream.Write(bufferArquivo, 0, (int)bufferArquivo.Length);
+
+                    break;
+                case "/CAMBIO/USD":
+                    controller = new CambioController();
+                    paginaConteudo = controller.USD();
+
+                    bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
+                    resposta.ContentLength64 = bufferArquivo.Length;
+                    resposta.OutputStream.Write(bufferArquivo, 0, (int)bufferArquivo.Length);
+
+                    break;
+                default:
+                    resposta.StatusCode = 404;
+                    break;
+            }
+
+            resposta.OutputStream.Close();
         }
 
         private void ExtractOutputStreamFile(HttpListenerContext contexto, string nomeResource, string contentType)
