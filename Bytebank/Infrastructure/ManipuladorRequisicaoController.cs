@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,36 +13,33 @@ namespace Bytebank.Infrastructure
     {
         public void Manipular(HttpListenerResponse resposta, string path)
         {
-            resposta.ContentType = Utility.ObterTipoDeConteudo(path);
-            resposta.StatusCode = 200;
-            CambioController controller;
-            string paginaConteudo = string.Empty;
-            byte[] bufferArquivo;
+            var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var controllerNome = partes[0];
+            var actionNome = partes[1];
 
-            switch (path.ToUpper())
+            string baseAssembly = "Bytebank.Controller";
+            string controllerNomeCompleto = $"{baseAssembly}.{controllerNome}Controller";
+
+            if (Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto) != null && Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto).GetMember(actionNome).Count() > 0)
             {
-                case "/CAMBIO/MXN":
-                    controller = new CambioController();
-                    paginaConteudo = controller.MXN();
-                    resposta.StatusCode = 200;
+                var controllerWrapper = Activator.CreateInstance("Bytebank", controllerNomeCompleto, new object[0]);
+                var controllerUnwrap = controllerWrapper.Unwrap();
 
-                    break;
-                case "/CAMBIO/USD":
-                    controller = new CambioController();
-                    paginaConteudo = controller.USD();
-                    resposta.StatusCode = 200;
+                var methodInfo = controllerUnwrap.GetType().GetMethod(actionNome);
+                var resultadoAction = (string)methodInfo.Invoke(controllerUnwrap, new object[0]);
 
-                    break;
-                default:
-                    resposta.StatusCode = 404;
-                    break;
-            }
+                resposta.ContentType = Utility.ObterTipoDeConteudo(path);
+                resposta.StatusCode = 200;
+                string paginaConteudo = resultadoAction;
+                byte[] bufferArquivo;
 
-            if (resposta.StatusCode == 200)
-            {
                 bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
                 resposta.ContentLength64 = bufferArquivo.Length;
                 resposta.OutputStream.Write(bufferArquivo, 0, (int)bufferArquivo.Length);
+            }
+            else
+            {
+                resposta.StatusCode = 404;
             }
 
             resposta.OutputStream.Close();
