@@ -32,7 +32,6 @@ namespace Bytebank.Infrastructure
 
             while (true)
             {
-
                 var contexto = httpListener.GetContext();
                 var requisicao = contexto.Request;
                 var path = requisicao.Url.AbsolutePath;
