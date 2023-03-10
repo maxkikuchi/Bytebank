@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\CambioController.cs" />
+    <Compile Include="Infrastructure\Binding\ActionBinder.cs" />
+    <Compile Include="Infrastructure\Binding\ArgumentoNomeValor.cs" />
+    <Compile Include="Infrastructure\ControllerBase.cs" />
     <Compile Include="Infrastructure\ManipuladorRequisicaoArquivo.cs" />
     <Compile Include="Infrastructure\ManipuladorRequisicaoController.cs" />
     <Compile Include="Infrastructure\Utility.cs" />
@@ -71,6 +74,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\images\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\Cambio\Calculo.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

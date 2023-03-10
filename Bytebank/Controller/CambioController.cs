@@ -1,4 +1,5 @@
-﻿using Bytebank.Service;
+﻿using Bytebank.Infrastructure;
+using Bytebank.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bytebank.Controller
 {
-    public class CambioController
+    public class CambioController : ControllerBase
     {
         private ICambioService _cambioService;
 
@@ -21,13 +22,8 @@ namespace Bytebank.Controller
         public string MXN()
         {
             var valorConvertido = _cambioService.Calcular("MXN", "BRL", 100.65M);
-            var nomeCompletoResource = "Bytebank.View.Cambio.MXN.html";
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var streamRecurso = assembly.GetManifestResourceStream(nomeCompletoResource);
-
-            var streamLeitura = new StreamReader(streamRecurso);
-            string conteudoLeitura = streamLeitura.ReadToEnd();
+          
+            string conteudoLeitura = View();
 
             return conteudoLeitura.Replace("VALOR_CONVERTIDO_REAIS", valorConvertido.ToString("0.##"));
         }
@@ -35,15 +31,22 @@ namespace Bytebank.Controller
         public string USD()
         {
             var valorConvertido = _cambioService.Calcular("USD", "BRL", 100.65M);
-            var nomeCompletoResource = "Bytebank.View.Cambio.USD.html";
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var streamRecurso = assembly.GetManifestResourceStream(nomeCompletoResource);
-
-            var streamLeitura = new StreamReader(streamRecurso);
-            string conteudoLeitura = streamLeitura.ReadToEnd();
+            
+            string conteudoLeitura = View();
 
             return conteudoLeitura.Replace("VALOR_CONVERTIDO_REAIS", valorConvertido.ToString("0.##"));
+        }
+
+        public string Calculo(string moedaOrigem, string moedaDestino, decimal valor)
+        {
+            var valorConvertido = _cambioService.Calcular(moedaOrigem, moedaDestino, valor);
+
+            string conteudoLeitura = View();
+
+            return conteudoLeitura
+                .Replace("VALOR_ORIGEM", valor.ToString("0.##"))
+                .Replace("MOEDA_ORIGEM", moedaOrigem)
+                .Replace("VALOR_CONVERTIDO",  $"{valorConvertido.ToString("0.##")} {moedaDestino}");
         }
     }
 }
