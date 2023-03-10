@@ -44,7 +44,7 @@ namespace Bytebank.Infrastructure
                 else
                 {
                     ManipuladorRequisicaoController manipuladorRequisicaoController = new ManipuladorRequisicaoController();
-                    manipuladorRequisicaoController.Manipular(contexto.Response, path);
+                    manipuladorRequisicaoController.Manipular(contexto.Response, path, "teste", 123);
                 }
             }
             

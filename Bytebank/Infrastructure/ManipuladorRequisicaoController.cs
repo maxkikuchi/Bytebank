@@ -1,4 +1,5 @@
 ﻿using Bytebank.Controller;
+using Bytebank.Infrastructure.Binding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,11 @@ namespace Bytebank.Infrastructure
 {
     public class ManipuladorRequisicaoController
     {
+        ActionBinder _actionBinder = new ActionBinder();
+
         public void Manipular(HttpListenerResponse resposta, string path)
         {
+            
             var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var controllerNome = partes[0];
             var actionNome = partes[1];
@@ -23,18 +27,18 @@ namespace Bytebank.Infrastructure
             if (Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto) != null && Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto).GetMember(actionNome).Count() > 0)
             {
                 var controllerWrapper = Activator.CreateInstance("Bytebank", controllerNomeCompleto, new object[0]);
-                var controllerUnwrap = controllerWrapper.Unwrap();
+                var controller = controllerWrapper.Unwrap();
 
-                var methodInfo = controllerUnwrap.GetType().GetMethod(actionNome);
-                var resultadoAction = (string)methodInfo.Invoke(controllerUnwrap, new object[0]);
+                //var methodInfo = controller.GetType().GetMethod(actionNome);
+                var methodInfo = _actionBinder.ObterMethodInfo(controller, path);
 
+                var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
+
+                byte[] bufferArquivo;
+                bufferArquivo = Encoding.UTF8.GetBytes(resultadoAction);
+                resposta.ContentLength64 = bufferArquivo.Length;
                 resposta.ContentType = Utility.ObterTipoDeConteudo(path);
                 resposta.StatusCode = 200;
-                string paginaConteudo = resultadoAction;
-                byte[] bufferArquivo;
-
-                bufferArquivo = Encoding.UTF8.GetBytes(paginaConteudo);
-                resposta.ContentLength64 = bufferArquivo.Length;
                 resposta.OutputStream.Write(bufferArquivo, 0, (int)bufferArquivo.Length);
             }
             else
