@@ -34,7 +34,7 @@ namespace Bytebank.Infrastructure
             {
                 var contexto = httpListener.GetContext();
                 var requisicao = contexto.Request;
-                var path = requisicao.Url.AbsolutePath;
+                var path = requisicao.RawUrl;
 
                 if (Utility.EhArquivo(path))
                 {
@@ -44,7 +44,7 @@ namespace Bytebank.Infrastructure
                 else
                 {
                     ManipuladorRequisicaoController manipuladorRequisicaoController = new ManipuladorRequisicaoController();
-                    manipuladorRequisicaoController.Manipular(contexto.Response, path, "teste", 123);
+                    manipuladorRequisicaoController.Manipular(contexto.Response, path);
                 }
             }
             

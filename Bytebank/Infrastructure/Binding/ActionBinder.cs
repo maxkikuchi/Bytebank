@@ -22,12 +22,41 @@ namespace Bytebank.Infrastructure.Binding
             if (indexInterrogacao > 0)
             {
                 var queryString = path.Substring(indexInterrogacao + 1);
-                var listaArgumentos = ObterArgumentoNomeValores(queryString);
+                var argumentos = ObterArgumentoNomeValores(queryString);
+                var nomeArgumentos = argumentos.Select(a => a.Nome).ToArray();
+
+                return ObterMethodInfoAPartirDeNomeEArgumentos(nomeAction, nomeArgumentos, controller);
             }
             else
             {
                 return controller.GetType().GetMethod(nomeAction);
             }
+        }
+
+        private MethodInfo ObterMethodInfoAPartirDeNomeEArgumentos(string nomeAction, string[] argumentos, object controller )
+        {
+
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.NonPublic;
+            var methodsInfo = controller.GetType().GetMethods(bindingFlags);
+
+
+            var overrides = methodsInfo.Where(m => m.Name == nomeAction);
+
+            foreach (var methodInfo in overrides)
+            {
+                var parameters = methodInfo.GetParameters();
+
+                if (parameters.Count() != argumentos.Count())
+                    continue;
+
+                var math = parameters.All(p => argumentos.Contains(p.Name));
+
+                if (math)
+                    return methodInfo;
+
+            }
+
+            throw new ArgumentException($"A sobrecarga do método {nomeAction} não foi encontrada!");
         }
 
         private IEnumerable<ArgumentoNomeValor> ObterArgumentoNomeValores(string queryString)

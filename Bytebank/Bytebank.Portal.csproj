@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Controller\CambioController.cs" />
     <Compile Include="Infrastructure\Binding\ActionBinder.cs" />
+    <Compile Include="Infrastructure\Binding\ActionBindInfo.cs" />
     <Compile Include="Infrastructure\Binding\ArgumentoNomeValor.cs" />
     <Compile Include="Infrastructure\ControllerBase.cs" />
     <Compile Include="Infrastructure\ManipuladorRequisicaoArquivo.cs" />
