@@ -16,21 +16,21 @@ namespace Bytebank.Infrastructure
 
         public void Manipular(HttpListenerResponse resposta, string path)
         {
-            
+
             var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var controllerNome = partes[0];
-            var actionNome = partes[1];
 
             string baseAssembly = "Bytebank.Controller";
             string controllerNomeCompleto = $"{baseAssembly}.{controllerNome}Controller";
 
-            if (Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto) != null && Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto).GetMember(actionNome).Count() > 0)
+            if (Assembly.GetExecutingAssembly().GetType(controllerNomeCompleto) != null)
             {
                 var controllerWrapper = Activator.CreateInstance("Bytebank", controllerNomeCompleto, new object[0]);
                 var controller = controllerWrapper.Unwrap();
 
                 //var methodInfo = controller.GetType().GetMethod(actionNome);
                 var methodInfo = _actionBinder.ObterMethodInfo(controller, path);
+
 
                 var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
 

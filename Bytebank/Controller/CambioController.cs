@@ -48,5 +48,9 @@ namespace Bytebank.Controller
                 .Replace("MOEDA_ORIGEM", moedaOrigem)
                 .Replace("VALOR_CONVERTIDO",  $"{valorConvertido.ToString("0.##")} {moedaDestino}");
         }
+
+        public string Calculo(string moedaDestino, decimal valor) => Calculo("BRL", moedaDestino, valor);
+        public string Calculo(string moedaDestino) => Calculo("BRL", moedaDestino, 1);
+
     }
 }
