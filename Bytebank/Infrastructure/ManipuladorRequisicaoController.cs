@@ -28,11 +28,9 @@ namespace Bytebank.Infrastructure
                 var controllerWrapper = Activator.CreateInstance("Bytebank", controllerNomeCompleto, new object[0]);
                 var controller = controllerWrapper.Unwrap();
 
-                //var methodInfo = controller.GetType().GetMethod(actionNome);
-                var methodInfo = _actionBinder.ObterMethodInfo(controller, path);
-
-
-                var resultadoAction = (string)methodInfo.Invoke(controller, new object[0]);
+                var actionBindInfo = _actionBinder.ObterActionBindInfo(controller, path);
+                
+                var resultadoAction = (string)actionBindInfo.Invoke(controller);
 
                 byte[] bufferArquivo;
                 bufferArquivo = Encoding.UTF8.GetBytes(resultadoAction);

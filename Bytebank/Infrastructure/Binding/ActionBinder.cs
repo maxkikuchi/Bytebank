@@ -9,7 +9,7 @@ namespace Bytebank.Infrastructure.Binding
 {
     public class ActionBinder
     {
-        public MethodInfo ObterMethodInfo(object controller, string path)
+        public ActionBindInfo ObterActionBindInfo(object controller, string path)
         {
             int indexInterrogacao = path.IndexOf('?');
 
@@ -25,11 +25,15 @@ namespace Bytebank.Infrastructure.Binding
                 var argumentos = ObterArgumentoNomeValores(queryString);
                 var nomeArgumentos = argumentos.Select(a => a.Nome).ToArray();
 
-                return ObterMethodInfoAPartirDeNomeEArgumentos(nomeAction, nomeArgumentos, controller);
+                var methodInfo = ObterMethodInfoAPartirDeNomeEArgumentos(nomeAction, nomeArgumentos, controller);
+                
+                return new ActionBindInfo(methodInfo, argumentos);
             }
             else
             {
-                return controller.GetType().GetMethod(nomeAction);
+                var methodInfo = controller.GetType().GetMethod(nomeAction);
+
+                return new ActionBindInfo(methodInfo, Enumerable.Empty<ArgumentoNomeValor>());
             }
         }
 
