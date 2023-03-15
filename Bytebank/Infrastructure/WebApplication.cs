@@ -34,7 +34,7 @@ namespace Bytebank.Infrastructure
             {
                 var contexto = httpListener.GetContext();
                 var requisicao = contexto.Request;
-                var path = requisicao.RawUrl;
+                var path = requisicao.Url.PathAndQuery;
 
                 if (Utility.EhArquivo(path))
                 {
