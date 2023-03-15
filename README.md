@@ -1,7 +1,5 @@
-# C# Reflection parte 1: metadados do seu código .NET
-
 --------------------------------------------------------
-C# Reflection parte 1: metadados do seu código .NET
+# C# Reflection parte 1: metadados do seu código .NET
 --------------------------------------------------------
 
 Faça esse curso de C# e:
