@@ -1,6 +1,6 @@
---------------------------------------------------------
-# C# Reflection parte 1: metadados do seu código .NET
---------------------------------------------------------
+--------------------------------------------------------------------
+# C# Reflection parte 1: metadados do seu código .NET (Curso Alura)
+--------------------------------------------------------------------
 
 - Faça esse curso de C# e: <br />
 - Torne seu código C# dinâmico <br />
