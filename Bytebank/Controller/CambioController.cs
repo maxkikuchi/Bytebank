@@ -16,7 +16,7 @@ namespace Bytebank.Controller
 
         public CambioController()
         {
-            _cambioService = new CambioServiceTeste();
+            _cambioService = new CambioService();
         }
 
         public string MXN()
