@@ -35,20 +35,26 @@ namespace Bytebank.Infrastructure
                 var contexto = httpListener.GetContext();
                 var requisicao = contexto.Request;
                 var path = requisicao.Url.PathAndQuery;
+                string[] splitPath = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (Utility.EhArquivo(path))
+                if (splitPath.Length > 0)
                 {
-                    ManipuladorRequisicaoArquivo manipuladorRequisicaoArquivo = new ManipuladorRequisicaoArquivo();
-                    manipuladorRequisicaoArquivo.Manipular(contexto.Response, path);
+                    if (Utility.EhArquivo(path))
+                    {
+                        ManipuladorRequisicaoArquivo manipuladorRequisicaoArquivo = new ManipuladorRequisicaoArquivo();
+                        manipuladorRequisicaoArquivo.Manipular(contexto.Response, path);
+                    }
+                    else
+                    {
+                        ManipuladorRequisicaoController manipuladorRequisicaoController = new ManipuladorRequisicaoController();
+                        manipuladorRequisicaoController.Manipular(contexto.Response, path);
+                    }
                 }
                 else
                 {
-                    ManipuladorRequisicaoController manipuladorRequisicaoController = new ManipuladorRequisicaoController();
-                    manipuladorRequisicaoController.Manipular(contexto.Response, path);
+                    //httpListener.Stop();
                 }
             }
-            
-            //httpListener.Stop();
         }
     }
 }
